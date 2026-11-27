@@ -3,139 +3,278 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI GUSTAVE - Réponse Instantanée</title>
+<title>AI GUSTAVE - Génère des Images</title>
 <style>
 *{box-sizing:border-box}
 body{font-family:Arial,sans-serif;background:#e8eef7;margin:0;padding:8px}
-.box{max-width:750px;margin:auto;background:white;border-radius:18px;padding:14px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+.box{max-width:780px;margin:auto;background:white;border-radius:18px;padding:14px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
 .top{text-align:center}
-.top h1{color:#1a73e8;font-size:24px;margin:5px 0}
+.top h1{color:#1a73e8;font-size:25px;margin:5px 0}
 .top p{color:#555;margin:0;font-size:14px}
-.badge{background:#e6f4ea;color:#137333;padding:8px;border-radius:10px;text-align:center;font-weight:bold;margin:12px 0;font-size:13px}
-#chat{background:#fafafa;border:1px solid #ddd;height:460px;overflow-y:auto;padding:10px;border-radius:12px;margin-bottom:10px}
-.msg{margin-bottom:10px;padding:11px 12px;border-radius:12px;max-width:92%;white-space:pre-wrap;line-height:1.6;font-size:14.5px}
+.badge{background:linear-gradient(90deg,#fff3cd,#e6f4ea,#d3e3fd);color:#333;padding:10px;border-radius:10px;text-align:center;font-weight:bold;margin:12px 0;font-size:13px}
+.motivation{background:linear-gradient(135deg,#ff9800,#ff5722);color:white;padding:12px;border-radius:12px;text-align:center;margin-bottom:10px;font-weight:bold;line-height:1.5}
+.motivation button{background:white;color:#ff5722;border:none;padding:7px 14px;border-radius:20px;font-weight:bold;margin-top:6px;cursor:pointer}
+.langues{display:flex;gap:6px;margin-bottom:10px}
+.langues button{flex:1;padding:9px;border:1px solid #1a73e8;background:white;color:#1a73e8;border-radius:20px;font-weight:bold;cursor:pointer;font-size:12px}
+.langues button.actif{background:#1a73e8;color:white}
+#chat{background:#fafafa;border:1px solid #ddd;height:420px;overflow-y:auto;padding:12px;border-radius:12px;margin-bottom:10px}
+.msg{margin-bottom:12px;padding:13px 14px;border-radius:14px;max-width:95%;line-height:1.7;font-size:15px;white-space:pre-wrap}
 .user{background:#d3e3fd;margin-left:auto;text-align:right}
-.ai{background:#e6f4ea}
+.ai{background:white;border:1px solid #e0e0e0;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+.ai h3{color:#1a73e8;margin:10px 0 5px 0;font-size:16px}
+.ai b{color:#111}
+.ai ul{margin:5px 0;padding-left:18px}
+.exemple-box{background:#f1f8e9;border-left:4px solid #34a853;padding:10px;border-radius:8px;margin:8px 0}
+.conclusion-box{background:#eef4ff;border-left:4px solid #1a73e8;padding:10px;border-radius:8px;margin:8px 0;font-weight:bold}
+.motivation-box{background:#fff3cd;border-left:4px solid #ff9800;padding:10px;border-radius:8px;margin:8px 0;font-weight:bold}
+.stickers-big{font-size:42px;text-align:center;letter-spacing:6px;animation:saute 1s ease infinite alternate;margin:10px 0}
+@keyframes saute{from{transform:translateY(0) scale(1)}to{transform:translateY(-8px) scale(1.1)}}
 img.preview{max-width:100%;border-radius:10px;margin-top:5px}
+img.generated{width:100%;border-radius:12px;margin-top:8px;border:2px solid #1a73e8}
+.genere-btn{background:#7b1fa2;color:white;border:none;padding:10px 14px;border-radius:20px;font-weight:bold;cursor:pointer;margin:5px 3px}
 .exemples{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .exemples button{background:#f1f3f4;border:1px solid #ddd;padding:7px 10px;border-radius:20px;font-size:12px;cursor:pointer}
 .inputrow{display:flex;gap:6px}
 .inputrow input{flex:1;padding:13px;border:1px solid #ccc;border-radius:12px;font-size:15px}
-.inputrow button{padding:13px 15px;border:none;border-radius:12px;color:white;font-weight:bold;cursor:pointer}
+.inputrow button{padding:13px 12px;border:none;border-radius:12px;color:white;font-weight:bold;cursor:pointer;font-size:13px}
 #sendBtn{background:#1a73e8}
 #photoBtn{background:#34a853}
+#stickerBtn{background:#ff9800}
+#imageBtn{background:#7b1fa2}
+#motivBtn{background:#ff9800;width:100%;margin-top:8px;padding:11px;color:white;border:none;border-radius:10px;font-weight:bold;cursor:pointer}
 #clearBtn{background:#ea4335;width:100%;margin-top:8px;padding:11px;color:white;border:none;border-radius:10px;font-weight:bold}
 small{color:#777}
 .typing{font-style:italic;color:#777}
+#stickerPanel{display:none;background:#fff8e1;border:1px solid #ffcc80;padding:10px;border-radius:12px;margin-bottom:10px;text-align:center}
+.stickers-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.stickers-row button{background:white;border:1px solid #ddd;font-size:26px;padding:8px 10px;border-radius:12px;cursor:pointer}
 </style>
 </head>
 <body>
 <div class="box">
 <div class="top">
 <h1>🤖 AI GUSTAVE</h1>
-<p>Polyvalent - Réponse instantanée - Pose-moi n'importe quelle question</p>
+<p>Génère des Images 🎨 - Motive - 3 Langues</p>
 </div>
-<div class="badge">⚡ Branché - Réponse automatique - Pas d'attente - Pas de clé</div>
+<div class="badge">🔥 TU VAS RÉUSSIR - Bravo ! 🎉</div>
+<div class="motivation" id="motivationJour">
+<span id="texteMotivation">💪 « Tu es capable. Chaque petit pas te rapproche de ton succès. Ne lâche pas ! »</span><br>
+<button onclick="nouvelleMotivation()">🔥 Autre motivation</button>
+</div>
+<div class="langues" id="langues">
+<button class="actif" onclick="choisirLangue(this,'auto')">🌍 Auto</button>
+<button onclick="choisirLangue(this,'fr')">🇫🇷 Français</button>
+<button onclick="choisirLangue(this,'en')">🇬🇧 English</button>
+<button onclick="choisirLangue(this,'rn')">🇧🇮 Kirundi</button>
+</div>
 <div id="chat"></div>
+<div id="stickerPanel">
+<b>Choisis un sticker :</b><br><br>
+<div class="stickers-row">
+<button onclick="envoyerSticker('🎉')">🎉</button><button onclick="envoyerSticker('👏')">👏</button><button onclick="envoyerSticker('🔥')">🔥</button><button onclick="envoyerSticker('🏆')">🏆</button><button onclick="envoyerSticker('⭐')">⭐</button><button onclick="envoyerSticker('💪')">💪</button><button onclick="envoyerSticker('❤️')">❤️</button><button onclick="envoyerSticker('😍')">😍</button><button onclick="envoyerSticker('🚀')">🚀</button><button onclick="envoyerSticker('🎯')">🎯</button>
+</div>
+</div>
 <div class="exemples">
-<button onclick="exemple('Explique-moi la multiplication avec un exemple simple')">➗ Multiplication</button>
-<button onclick="exemple('Donne-moi une idée de business avec petit budget en Afrique')">💰 Idée business</button>
-<button onclick="exemple('Comment faire un bon CV ?')">📄 CV</button>
-<button onclick="exemple('C’est quoi la photosynthèse ?')">🌱 Photosynthèse</button>
-<button onclick="exemple('Aide-moi à écrire un message pour vendre mon produit')">🛍️ Vendre</button>
-<button onclick="exemple('Comment apprendre l’anglais rapidement ?')">🇬🇧 Anglais</button>
+<button onclick="exemple('Motive-moi, je suis fatigué')">🔥 Motive-moi</button>
+<button onclick="exemple('Génère une image d’une belle maison au Burundi')">🎨 Génère maison</button>
+<button onclick="exemple('Génère une image d’un lion dans la savane')">🦁 Génère lion</button>
+<button onclick="exemple('Explique-moi la multiplication')">➗ Multiplication</button>
+<button onclick="exemple('Donne-moi une idée de business')">💰 Business</button>
 </div>
 <div class="inputrow">
-<input type="text" id="question" placeholder="Pose n'importe quelle question ici...">
+<input type="text" id="question" placeholder="Écris ici ou Génère une image de...">
 <button id="sendBtn" onclick="envoyer()">Envoyer</button>
+<button id="imageBtn" onclick="genererImageDepuisInput()">🎨 Image</button>
+<button id="stickerBtn" onclick="toggleStickers()">😍</button>
 <button id="photoBtn" onclick="document.getElementById('photoInput').click()">📷 Photo</button>
 </div>
 <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="envoyerPhoto(this)">
-<button id="clearBtn" onclick="effacerChat()">Effacer la conversation</button>
+<button id="motivBtn" onclick="exemple('Motive-moi fort pour réussir aujourd’hui')">🔥 MOTIVE-MOI FORT</button>
+<button id="clearBtn" onclick="effacerChat()">Effacer / Gusiba</button>
 <br><br>
-<small>Tu peux poser plusieurs questions d'affilée, ça répond tout de suite.</small>
+<small>Envoie une photo + écris « Génère ça » et il génère l'image. Ou écris « Génère une image de... »</small>
 </div>
 <script>
+let langueChoisie = "auto";
 let historique = JSON.parse(localStorage.getItem("gustave_chat") || "[]");
+let dernierePhotoDesc = "";
+let motivationsFR = ["💪 « Tu es capable. Chaque petit pas te rapproche de ton succès. Ne lâche pas ! »","🌟 « N'attends pas d'être parfait pour commencer. Commence, et tu deviendras parfait. »","🔥 « Ton rêve est possible. Travaille chaque jour un peu, et tu vas réussir. »","🏆 « Les grands ont commencé petit. Toi aussi, tu peux y arriver. Continue ! »","🚀 « Aujourd'hui est ton jour. Lève-toi, crois en toi, avance ! »"];
+function nouvelleMotivation(){ let l=langueChoisie; if(l==="auto") l="fr"; let liste=motivationsFR; document.getElementById("texteMotivation").innerText = liste[Math.floor(Math.random()*liste.length)]; }
+function choisirLangue(btn,l){ langueChoisie=l; document.querySelectorAll('#langues button').forEach(b=>b.classList.remove('actif')); btn.classList.add('actif'); }
+function toggleStickers(){ let p=document.getElementById("stickerPanel"); p.style.display = p.style.display==="block" ? "none" : "block"; }
 function sauvegarder(){ localStorage.setItem("gustave_chat", JSON.stringify(historique.slice(-40))); }
-function ajouterMessage(texte, type, sauver=true){
+function stickersPourTexte(texte){
+  let bas = texte.toLowerCase();
+  if(bas.includes("bravo") || bas.includes("félicitations") || bas.includes("congratulations") || bas.includes("wakoze")) return "🎉 👏 🏆 ⭐ 🥳";
+  if(bas.includes("tu vas réussir") || bas.includes("urazotsinda") || bas.includes("you will succeed")) return "🔥 🚀 🎯 💪 🌟";
+  if(bas.includes("motivation") || bas.includes("fatigué") || bas.includes("tired") || bas.includes("ndarushe")) return "💪 🔥 ❤️ 🌟";
+  return "";
+}
+function belleEcriture(texte){
+  let html = texte.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+    .replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
+    .replace(/^### (.*)$/gm,"<h3>$1</h3>").replace(/^## (.*)$/gm,"<h3>$1</h3>").replace(/^# (.*)$/gm,"<h3>$1</h3>")
+    .replace(/Exemple :/g,"</div><div class='exemple-box'><b>💡 Exemple :</b>")
+    .replace(/Conclusion :/g,"</div><div class='conclusion-box'>✅ Conclusion :")
+    .replace(/En résumé :/g,"</div><div class='conclusion-box'>✅ En résumé :")
+    .replace(/Mu ncamake :/g,"</div><div class='conclusion-box'>✅ Mu ncamake :")
+    .replace(/In summary:/g,"</div><div class='conclusion-box'>✅ In summary:")
+    .replace(/Motivation :/g,"</div><div class='motivation-box'>🔥 Motivation :");
+  html = html.replace(/^- (.*)$/gm,"<li>$1</li>");
+  html = html.replace(/(<li>.*<\/li>)/s,"<ul>$1</ul>");
+  let stickers = stickersPourTexte(texte);
+  if(stickers){ html += "<div class='stickers-big'>" + stickers + "</div><div style='text-align:center;font-weight:bold;color:#ff5722'>Bravo ! Continue comme ça ! 🎉</div>"; }
+  return html;
+}
+function ajouterMessage(texte, type, sauver=true, estHTML=false){
   let chat = document.getElementById("chat");
   let div = document.createElement("div");
   div.className = "msg " + type;
-  div.innerText = texte;
+  if(estHTML && type==="ai"){ div.innerHTML = belleEcriture(texte); }
+  else { div.innerText = texte; }
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
   if(sauver){ historique.push({t:texte, type:type}); sauvegarder(); }
   return div;
 }
+function ajouterImageGeneree(url, prompt){
+  let chat = document.getElementById("chat");
+  let div = document.createElement("div");
+  div.className = "msg ai";
+  div.innerHTML = "<b>🎨 Voilà ton image générée ! Bravo ! 🎉</b><br><b>Tu as demandé :</b> " + prompt + "<br><img src='" + url + "' class='generated'><br><div class='stickers-big'>🎉 👏 🏆 ⭐</div><div style='text-align:center;font-weight:bold'>Bravo ! Tu veux que je génère une autre image ? Dis-moi : Génère une image de...</div>";
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  historique.push({t:"Image générée : " + prompt, type:"ai"}); sauvegarder();
+}
+function ajouterStickerMessage(sticker, type){
+  let chat = document.getElementById("chat");
+  let div = document.createElement("div");
+  div.className = "msg " + type;
+  div.style.fontSize = "48px"; div.style.textAlign = "center";
+  div.innerText = sticker + " " + sticker + " " + sticker;
+  chat.appendChild(div); chat.scrollTop = chat.scrollHeight;
+  historique.push({t:sticker, type:type}); sauvegarder();
+}
+function envoyerSticker(sticker){
+  ajouterStickerMessage(sticker, "user");
+  document.getElementById("stickerPanel").style.display = "none";
+  setTimeout(()=>{ ajouterMessage("Bravo ! 🎉 J'ai reçu ton sticker " + sticker + " ! Tu es génial ! Continue comme ça, tu vas réussir ! 🔥", "ai", true, true); }, 800);
+}
 function charger(){
   if(historique.length===0){
-    ajouterMessage("Bonjour ! Je suis AI GUSTAVE, polyvalent et rapide. Tu peux me demander TOUT : les cours, les devoirs, le business, comment vendre, comment écrire un CV, comment utiliser ton téléphone, des idées, des traductions, des conseils. Je réponds tout de suite, en français simple, étape par étape, avec des exemples. Pose ta question !", "ai", false);
-  } else { historique.forEach(h=> ajouterMessage(h.t, h.type, false)); }
+    ajouterMessage("Bonjour ! Muraho ! Hello ! 🔥\n\n**TU VAS RÉUSSIR !** 🎉 Je suis AI GUSTAVE.\n\nJe peux tout faire pour toi :\n- 📚 T'expliquer les cours, les devoirs\n- 💰 T'aider pour le business\n- 🎨 **GÉNÉRER DES IMAGES** : envoie-moi une photo et dis « Génère ça », ou écris « Génère une image de... » et je génère l'image pour toi !\n- 🔥 Te motiver quand tu es fatigué\n- 🎉 T'envoyer des stickers quand tu réussis\n\nAlors dis-moi : tu veux que je t'explique quelque chose, ou que je te génère une image ?", "ai", false, true);
+  } else { historique.forEach(h=> ajouterMessage(h.t, h.type, false, h.type==="ai")); }
 }
 charger();
-function effacerChat(){
-  historique = []; localStorage.removeItem("gustave_chat");
-  document.getElementById("chat").innerHTML = "";
-  ajouterMessage("Conversation effacée. Pose une nouvelle question !", "ai", false);
-}
+function effacerChat(){ historique=[]; localStorage.removeItem("gustave_chat"); document.getElementById("chat").innerHTML=""; ajouterMessage("Conversation effacée. Mais n'oublie pas : TU VAS RÉUSSIR ! 🎉", "ai", false); }
 function exemple(texte){ document.getElementById("question").value = texte; envoyer(); }
-
-async function demanderIA(question){
-  // CERVEAU 1 : Rapide, sans limite, sans clé
+function detecterLangue(q){
+  if(langueChoisie !== "auto") return langueChoisie;
+  let bas = " " + q.toLowerCase() + " ";
+  let motsKirundi = [" muraho ", " amakuru ", " gute ", " ni gute ", " nshobora ", " nsobanurira ", " kwiga ", " icongereza ", " igifaransa ", " mu kirundi ", " andika ", " vyose ", " ndakumva ", " ndarushe ", " nterere ", " ego ", " oya ", " murakoze "];
+  for(let m of motsKirundi){ if(bas.includes(m)) return "rn"; }
+  let motsAnglais = [" how ", " what ", " why ", " where ", " when ", " who ", " can you", " please ", " help me", " learn ", " explain", " give me", " write ", " english", " business", " hello ", " motivate ", " tired ", " generate "];
+  for(let m of motsAnglais){ if(bas.includes(m)) return "en"; }
+  return "fr";
+}
+function estDemandeImage(q){
+  let bas = q.toLowerCase();
+  return bas.includes("génère") || bas.includes("genere") || bas.includes("générer") || bas.includes("generate") || bas.includes("crée une image") || bas.includes("cree une image") || bas.includes("dessine") || bas.includes("kora ifoto") || bas.includes("génère ça") || bas.includes("genere ca");
+}
+function extrairePromptImage(q){
+  let p = q.replace(/génère une image de/gi, "").replace(/genere une image de/gi, "").replace(/génère/gi, "").replace(/genere/gi, "").replace(/générer/gi, "").replace(/generate an image of/gi, "").replace(/generate/gi, "").replace(/ça/gi, "").replace(/ca/gi, "").trim();
+  if(!p || p.length < 3){ p = dernierePhotoDesc || "une belle image colorée, de haute qualité"; }
+  return p;
+}
+function genererImageDepuisInput(){
+  let input = document.getElementById("question");
+  let q = input.value.trim();
+  if(!q){ input.value = "Génère une image de "; input.focus(); return; }
+  envoyer();
+}
+async function genererImage(prompt){
+  let attente = ajouterMessage("🎨 Je génère ton image... Attends 3 secondes... Bravo, ça arrive ! ✨", "ai", false);
+  attente.classList.add("typing");
   try{
-    let res = await fetch("https://ai.hackclub.com/chat/completions", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        model: "qwen/qwen3-32b",
-        messages: [
-          {role: "system", content: "Tu es AI GUSTAVE, un assistant polyvalent comme Meta AI, intelligent, gentil, patient. Tu réponds à TOUTES les questions : école, devoirs, maths, français, sciences, histoire, business, vente, marketing, CV, lettres, messages, téléphone, informatique, idées, conseils de vie, traductions, cuisine, sport. Tu parles en français simple, clair, étape par étape. Tu dis toujours la vérité. Tu ne dis jamais seulement 'je ne sais pas'. Si tu ne connais pas, tu dis ce que tu sais, tu donnes un exemple, tu proposes une solution. Si c'est du business, tu donnes un plan concret. Si on te demande d'écrire un texte, tu écris le texte complet prêt à copier. Tu structures avec des titres, des étapes numérotées et des exemples. À la fin tu demandes : 'Tu as compris ? Tu veux que j'explique encore plus simplement ?'"},
-          {role: "user", content: question}
-        ]
-      })
-    });
+    let promptAmeliore = prompt + ", belle image, haute qualité, couleurs vives, détaillée, professionnelle";
+    let url = "https://image.pollinations.ai/prompt/" + encodeURIComponent(promptAmeliore) + "?width=1024&height=1024&seed=" + Math.floor(Math.random()*1000000) + "&nologo=true";
+    // On précharge pour être sûr que l'image existe
+    let img = new Image();
+    img.onload = function(){
+      attente.remove();
+      ajouterImageGeneree(url, prompt);
+    };
+    img.onerror = function(){
+      attente.innerText = "L'image n'a pas pu se générer. Réessaie : Génère une image de...";
+    };
+    img.src = url;
+  }catch(e){
+    attente.innerText = "Je n'ai pas pu générer l'image. Réessaie : Génère une image de...";
+  }
+}
+function reponseSecours(q, langue){
+  if(langue==="en") return "## You Are Capable! 🔥 Bravo! 🎉\n\n**Your question:** " + q + "\n\n### Step by step\n\n- **Step 1:** First, let's understand the main idea.\n- **Step 2:** Then, let's see a simple example.\n- **Step 3:** Then, you try it yourself.\n\n**Motivation :** Bravo! Don't give up. YOU WILL SUCCEED!";
+  if(langue==="rn") return "## Urafise! 🔥 Bravo! 🎉\n\n**Ikibazo cawe:** " + q + "\n\n### Ku ntambwe ku ntambwe\n\n- **Intambwe ya 1:** Ubwa mbere, twumve neza ico dusabwe.\n- **Intambwe ya 2:** Ubwa kabiri, turabe urugero rworoshe.\n- **Intambwe ya 3:** Ubwa gatatu, ugerageze nawe wenyene.\n\n**Motivation :** Bravo! Ntihebe. URAZOTSINDA!";
+  return "## Tu Es Capable ! 🔥 Bravo ! 🎉\n\n**Ta question :** " + q + "\n\n### Explication étape par étape\n\n- **Étape 1 :** D'abord, on comprend bien ce qu'on demande.\n- **Étape 2 :** Ensuite, on regarde un exemple simple.\n- **Étape 3 :** Après, on essaie soi-même.\n\n**Motivation :** Bravo ! Ne lâche pas. TU VAS RÉUSSIR !";
+}
+async function demanderIA(question, langue){
+  let systeme = "";
+  if(langue==="en") systeme = "You are AI GUSTAVE, a MOTIVATIONAL COACH like Meta AI, with VERY BEAUTIFUL WRITING. You answer in ENGLISH. You ALWAYS motivate. When user succeeds, you say BRAVO! with stickers 🎉 👏 🏆. You also can GENERATE IMAGES: if user asks to generate an image, say 'I am generating your image...' and describe the image. ALWAYS use structure: ## Title, **Introduction**, ### Step by step, **Exemple :**, **Motivation :**, **In summary:**. Use **bold**. Answer ALL questions. Never say only 'I don't know'.";
+  else if(langue==="rn") systeme = "Uri AI GUSTAVE, UMUTEREREZI W'INKOMEZI, nka Meta AI, ufise INYANDIKO NZIZA CANE. Uvuga mu KIRUNDI. BURI GIHE uterera umuntu. Iyo umuntu atsinze, uvuga BRAVO! n'ibimenyetso 🎉 👏 🏆. Ushobora kandi GUKORA AMAFOTO: nibasaba gukora ifoto, vuga 'Ndagukorera ifoto...' hanyuma usobanure ifoto. BURI GIHE ukoresheje: ## Umutwe, **Intangamarara**, ### Ku ntambwe, **Exemple :**, **Motivation :**, **Mu ncamake :**. Ushobora kwishura IBIBAZO VYOSE.";
+  else systeme = "Tu es AI GUSTAVE, un COACH MOTIVATEUR comme Meta AI, avec une TRÈS BELLE ÉCRITURE. Tu réponds en FRANÇAIS. Tu MOTIVES toujours. Quand la personne réussit, tu dis BRAVO ! avec stickers 🎉 👏 🏆. Tu peux aussi GÉNÉRER DES IMAGES : si on te demande de générer une image, dis 'Je génère ton image...' et décris l'image. Utilise TOUJOURS : ## Titre, **Introduction**, ### Explication étape par étape, **Exemple :**, **Motivation :**, **En résumé :**. Mets les mots importants en **gras**. Tu réponds à TOUTES les questions. Tu ne dis jamais seulement 'je ne sais pas'.";
+  try{
+    let res = await fetch("https://ai.hackclub.com/chat/completions", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({model:"qwen/qwen3-32b", messages:[{role:"system", content:systeme},{role:"user", content:question}]})});
     let data = await res.json();
     let rep = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
-    if(rep && rep.length > 10) return rep;
+    if(rep && rep.length > 10 && !rep.includes("Free limit") && !rep.includes("API key")) return rep;
   }catch(e){}
-  // CERVEAU 2 : Secours si le 1er est lent
-  let prompt = "Tu es AI GUSTAVE, assistant polyvalent. Réponds en français simple, étape par étape, avec des exemples. Question : " + question;
-  let res2 = await fetch("https://text.pollinations.ai/" + encodeURIComponent(prompt) + "?model=openai");
-  let texte2 = await res2.text();
-  return texte2;
+  try{
+    let prompt = systeme + " Question : " + question;
+    let res2 = await fetch("https://text.pollinations.ai/" + encodeURIComponent(prompt) + "?model=openai");
+    let texte2 = await res2.text();
+    if(texte2 && texte2.length > 10 && !texte2.includes("Free limit") && !texte2.includes("Please wait")) return texte2;
+  }catch(e){}
+  return reponseSecours(question, langue);
 }
-
 async function envoyer(){
   let input = document.getElementById("question");
   let q = input.value.trim();
   if(!q) return;
+  let langue = detecterLangue(q);
   ajouterMessage(q, "user");
   input.value = "";
-  let attente = ajouterMessage("AI GUSTAVE écrit...", "ai", false);
-  attente.classList.add("typing");
-  try{
-    let reponse = await demanderIA(q);
-    attente.classList.remove("typing");
-    attente.innerText = reponse;
-    historique.push({t:reponse, type:"ai"}); sauvegarder();
-  }catch(e){
-    attente.innerText = "Problème de connexion. Vérifie ton internet et réessaie.";
+  // SI C'EST UNE DEMANDE D'IMAGE -> ON GÉNÈRE L'IMAGE
+  if(estDemandeImage(q)){
+    let promptImage = extrairePromptImage(q);
+    await genererImage(promptImage);
+    return;
   }
+  let attente = ajouterMessage("AI GUSTAVE t'écrit avec motivation...", "ai", false);
+  attente.classList.add("typing");
+  let reponse = await demanderIA(q, langue);
+  attente.classList.remove("typing");
+  attente.innerHTML = belleEcriture(reponse);
+  historique.push({t:reponse, type:"ai"}); sauvegarder();
 }
 async function envoyerPhoto(inputFile){
   let file = inputFile.files[0];
   if(!file) return;
   let reader = new FileReader();
   reader.onload = function(e){
-    ajouterMessage("📷 Photo envoyée", "user");
+    ajouterMessage("📷 Photo envoyée / Ifoto yoherejwe", "user");
     let chat = document.getElementById("chat");
     let img = document.createElement("img");
     img.src = e.target.result;
     img.className = "preview";
     chat.appendChild(img);
     chat.scrollTop = chat.scrollHeight;
-    ajouterMessage("J'ai bien reçu ta photo. Maintenant écris-moi en bas ce qui est écrit dessus, ou ce que tu veux que je fasse avec. Par exemple : 'Explique-moi cet exercice' ou 'Traduis ce texte'.", "ai");
+    dernierePhotoDesc = "image basée sur ta photo";
+    // Boutons pour générer
+    let div = document.createElement("div");
+    div.className = "msg ai";
+    div.innerHTML = "<b>Bravo ! 🎉 J'ai bien reçu ta photo.</b><br><br>Tu veux que je génère ça ?<br><br><button class='genere-btn' onclick=\"document.getElementById('question').value='Génère ça'; envoyer()\">🎨 Oui, Génère ça</button><button class='genere-btn' onclick=\"document.getElementById('question').value='Explique-moi cette photo'; envoyer()\">📚 Explique-moi cette photo</button><br><br>Ou écris toi-même : <b>« Génère ça »</b> ou <b>« Génère une image de... »</b>";
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
   };
   reader.readAsDataURL(file);
 }
