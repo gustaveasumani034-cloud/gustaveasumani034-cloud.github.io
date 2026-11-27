@@ -3,162 +3,133 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI GUSTAVE ECOLE</title>
+<title>AI GUSTAVE - Polyvalent</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f0f2f5;margin:0;padding:10px}
-.box{max-width:700px;margin:auto;background:white;border-radius:15px;padding:15px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
-h1{text-align:center;color:#1a73e8;font-size:22px}
-p.sub{text-align:center;color:#555;margin-top:-10px}
-.keybox{background:#eef4ff;padding:10px;border-radius:10px;margin-bottom:10px}
-.keybox input{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;margin-bottom:8px}
-.keybox button{width:100%;padding:10px;background:#1a73e8;color:white;border:none;border-radius:8px;font-weight:bold}
-#chat{background:#fafafa;border:1px solid #ddd;height:380px;overflow-y:auto;padding:10px;border-radius:10px;margin-bottom:10px}
-.msg{margin-bottom:10px;padding:10px;border-radius:10px;max-width:90%;white-space:pre-wrap;line-height:1.5}
+*{box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#e8eef7;margin:0;padding:8px}
+.box{max-width:750px;margin:auto;background:white;border-radius:18px;padding:14px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+.top{text-align:center}
+.top h1{color:#1a73e8;font-size:24px;margin:5px 0}
+.top p{color:#555;margin:0;font-size:14px}
+.badge{background:#e6f4ea;color:#137333;padding:8px;border-radius:10px;text-align:center;font-weight:bold;margin:12px 0;font-size:13px}
+#chat{background:#fafafa;border:1px solid #ddd;height:440px;overflow-y:auto;padding:10px;border-radius:12px;margin-bottom:10px}
+.msg{margin-bottom:10px;padding:11px 12px;border-radius:12px;max-width:92%;white-space:pre-wrap;line-height:1.6;font-size:14.5px}
 .user{background:#d3e3fd;margin-left:auto;text-align:right}
 .ai{background:#e6f4ea}
 img.preview{max-width:100%;border-radius:10px;margin-top:5px}
-.inputrow{display:flex;gap:5px}
-.inputrow input{flex:1;padding:12px;border:1px solid #ccc;border-radius:10px}
-.inputrow button{padding:12px 15px;border:none;border-radius:10px;color:white;font-weight:bold}
+.exemples{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.exemples button{background:#f1f3f4;border:1px solid #ddd;padding:7px 10px;border-radius:20px;font-size:12px;cursor:pointer}
+.inputrow{display:flex;gap:6px}
+.inputrow input{flex:1;padding:13px;border:1px solid #ccc;border-radius:12px;font-size:15px}
+.inputrow button{padding:13px 15px;border:none;border-radius:12px;color:white;font-weight:bold;cursor:pointer}
 #sendBtn{background:#1a73e8}
 #photoBtn{background:#34a853}
-#clearBtn{background:#ea4335;width:100%;margin-top:8px;padding:10px;color:white;border:none;border-radius:8px;font-weight:bold}
+#clearBtn{background:#ea4335;width:100%;margin-top:8px;padding:11px;color:white;border:none;border-radius:10px;font-weight:bold}
 small{color:#777}
+.typing{font-style:italic;color:#777}
 </style>
 </head>
 <body>
 <div class="box">
-<h1>🤖 AI GUSTAVE ECOLE</h1>
-<p class="sub">Pose ta question, je t'explique en français simple, étape par étape.</p>
-
-<div class="keybox">
-<b>1. Mets ta clé Gemini ici :</b><br>
-<small>Ta clé reste seulement sur ton téléphone, elle n'est pas dans le code.</small><br><br>
-<input type="password" id="apiKey" placeholder="Colle ta clé ici... (commence par AIza...)">
-<button onclick="sauverCle()">Sauver ma clé</button>
-<div id="keyStatus" style="margin-top:5px;font-size:13px;color:green"></div>
+<div class="top">
+<h1>🤖 AI GUSTAVE</h1>
+<p>Polyvalent - Pose-moi n'importe quelle question, je t'aide</p>
 </div>
+<div class="badge">✅ Branché - Pas besoin de clé - Répond à tout</div>
 
-<div id="chat">
-<div class="msg ai">Bonjour ! Je suis AI GUSTAVE. Pose-moi une question de cours ou envoie-moi une photo d'exercice, je vais t'expliquer en français simple, étape par étape.</div>
+<div id="chat"></div>
+
+<div class="exemples">
+<button onclick="exemple('Explique-moi la multiplication avec un exemple simple')">➗ Multiplication</button>
+<button onclick="exemple('Donne-moi une idée de business avec petit budget en Afrique')">💰 Idée business</button>
+<button onclick="exemple('Comment faire un bon CV ?')">📄 CV</button>
+<button onclick="exemple('C’est quoi la photosynthèse ?')">🌱 Photosynthèse</button>
+<button onclick="exemple('Aide-moi à écrire un message pour vendre mon produit')">🛍️ Vendre</button>
+<button onclick="exemple('Comment apprendre l’anglais rapidement ?')">🇬🇧 Anglais</button>
 </div>
 
 <div class="inputrow">
-<input type="text" id="question" placeholder="Écris ta question ici... ex: explique-moi la multiplication">
+<input type="text" id="question" placeholder="Pose n'importe quelle question ici...">
 <button id="sendBtn" onclick="envoyer()">Envoyer</button>
 <button id="photoBtn" onclick="document.getElementById('photoInput').click()">📷 Photo</button>
 </div>
 <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="envoyerPhoto(this)">
 <button id="clearBtn" onclick="effacerChat()">Effacer la conversation</button>
 <br><br>
-<small>Exemple : "Bonjour, explique-moi la multiplication" - "C'est quoi la photosynthèse ?" - "Aide-moi avec cet exercice [photo]"</small>
+<small>Tu peux demander : cours, devoirs, business, téléphone, idées, messages, CV, traductions, tout.</small>
 </div>
 
 <script>
-let maCle = localStorage.getItem("gustave_key") || "";
-if(maCle){
-  document.getElementById("apiKey").value = maCle;
-  document.getElementById("keyStatus").innerText = "Clé sauvegardée ! Ton cerveau est branché.";
+let historique = JSON.parse(localStorage.getItem("gustave_chat") || "[]");
+function sauvegarder(){
+  localStorage.setItem("gustave_chat", JSON.stringify(historique.slice(-40)));
 }
-
-function sauverCle(){
-  let k = document.getElementById("apiKey").value.trim();
-  if(!k){
-    alert("Colle d'abord ta clé !");
-    return;
-  }
-  maCle = k;
-  localStorage.setItem("gustave_key", k);
-  document.getElementById("keyStatus").innerText = "Clé sauvegardée ! Ton cerveau est branché.";
-  alert("Clé sauvegardée ! Maintenant teste avec Bonjour");
-}
-
-function ajouterMessage(texte, type){
+function ajouterMessage(texte, type, sauver=true){
   let chat = document.getElementById("chat");
   let div = document.createElement("div");
   div.className = "msg " + type;
   div.innerText = texte;
   chat.appendChild(div);
   chat.scrollTop = chat.scrollHeight;
+  if(sauver){ historique.push({t:texte, type:type}); sauvegarder(); }
   return div;
 }
-
-function effacerChat(){
-  document.getElementById("chat").innerHTML = '<div class="msg ai">Conversation effacée. Pose une nouvelle question !</div>';
+function charger(){
+  if(historique.length===0){
+    ajouterMessage("Bonjour ! Je suis AI GUSTAVE, polyvalent. Tu peux me demander TOUT : les cours, les devoirs, le business, comment vendre, comment écrire un CV, comment utiliser ton téléphone, des idées, des traductions, des conseils. Je t'explique en français simple, étape par étape, avec des exemples. Pose ta question !", "ai", false);
+  } else {
+    historique.forEach(h=> ajouterMessage(h.t, h.type, false));
+  }
 }
-
+charger();
+function effacerChat(){
+  historique = [];
+  localStorage.removeItem("gustave_chat");
+  document.getElementById("chat").innerHTML = "";
+  ajouterMessage("Conversation effacée. Pose une nouvelle question !", "ai", false);
+}
+function exemple(texte){
+  document.getElementById("question").value = texte;
+  envoyer();
+}
 async function envoyer(){
   let input = document.getElementById("question");
   let q = input.value.trim();
   if(!q) return;
-  if(!maCle){
-    alert("Colle d'abord ta clé en haut et appuie sur Sauver ma clé");
-    return;
-  }
   ajouterMessage(q, "user");
   input.value = "";
-  let attente = ajouterMessage("Je réfléchis...", "ai");
+  let attente = ajouterMessage("AI GUSTAVE écrit...", "ai", false);
+  attente.classList.add("typing");
 
-  let promptSystem = "Tu es AI GUSTAVE, un professeur gentil et patient. Tu parles en français simple. Tu expliques toujours étape par étape, avec des exemples simples. Tu dis toujours la vérité. Tu ne dis jamais seulement 'je ne sais pas', tu essaies toujours d'expliquer, de donner un exemple, et de proposer une autre façon de comprendre. Si la question est sur l'école, tu aides pour les cours, les devoirs, les maths, le français, les sciences. Question de l'élève : " + q;
+  let prompt = "Tu es AI GUSTAVE, un assistant polyvalent comme Meta AI, intelligent, gentil, patient, qui sait tout faire. Tu réponds à TOUTES les questions : école, devoirs, maths, français, sciences, histoire, business, vente, marketing, CV, lettres, messages, téléphone, informatique, idées, conseils de vie, traductions, santé générale, cuisine, sport. Tu parles en français simple, clair, étape par étape quand il faut expliquer. Tu dis toujours la vérité. Tu ne dis jamais seulement 'je ne sais pas'. Si tu ne connais pas une chose, tu dis ce que tu sais, tu donnes un exemple, tu proposes une solution et une autre façon de comprendre. Tu t'adaptes : si c'est une question d'école, tu expliques comme un prof. Si c'est du business, tu donnes un plan concret. Si c'est une demande d'écrire un texte, tu écris le texte complet, prêt à copier. Structure ta réponse avec des titres, des étapes numérotées et des exemples. À la fin, demande : 'Tu as compris ? Tu veux que j'explique encore plus simplement ou que je te donne un autre exemple ?' Question de l'utilisateur : " + q;
 
   try{
-    let res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + maCle, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({contents: [{parts: [{text: promptSystem}]}]})
-    });
-    let data = await res.json();
-    if(data.error){
-      attente.innerText = "Problème de connexion ou clé invalide. Vérifie ta clé sur aistudio.google.com/apikey";
-    } else {
-      attente.innerText = data.candidates[0].content.parts[0].text;
-    }
+    let url = "https://text.pollinations.ai/" + encodeURIComponent(prompt) + "?model=openai";
+    let res = await fetch(url);
+    let texte = await res.text();
+    attente.classList.remove("typing");
+    attente.innerText = texte;
+    historique.push({t:texte, type:"ai"}); sauvegarder();
   }catch(e){
     attente.innerText = "Problème de connexion. Vérifie ton internet et réessaie.";
   }
 }
-
 async function envoyerPhoto(inputFile){
-  if(!maCle){
-    alert("Colle d'abord ta clé en haut et appuie sur Sauver ma clé");
-    return;
-  }
   let file = inputFile.files[0];
   if(!file) return;
   let reader = new FileReader();
-  reader.onload = async function(e){
-    let base64 = e.target.result.split(",")[1];
-    ajouterMessage("📷 Photo envoyée, je regarde l'exercice...", "user");
+  reader.onload = function(e){
+    ajouterMessage("📷 Photo envoyée", "user");
     let chat = document.getElementById("chat");
     let img = document.createElement("img");
     img.src = e.target.result;
     img.className = "preview";
     chat.appendChild(img);
     chat.scrollTop = chat.scrollHeight;
-
-    let attente = ajouterMessage("Je regarde ta photo...", "ai");
-
-    let promptPhoto = "Tu es AI GUSTAVE, un professeur gentil. Regarde cette photo d'exercice. Lis bien ce qui est écrit. Explique l'exercice en français simple, étape par étape. Donne la réponse avec l'explication. Tu dis toujours la vérité. Tu ne dis jamais seulement 'je ne sais pas', tu essaies toujours d'expliquer.";
-
-    try{
-      let res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + maCle, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({contents: [{parts: [{text: promptPhoto}, {inline_data: {mime_type: file.type, data: base64}}]}]})
-      });
-      let data = await res.json();
-      if(data.error){
-        attente.innerText = "Problème de connexion ou clé invalide. Vérifie ta clé sur aistudio.google.com/apikey";
-      } else {
-        attente.innerText = data.candidates[0].content.parts[0].text;
-      }
-    }catch(err){
-      attente.innerText = "Problème de connexion. Vérifie ton internet et réessaie.";
-    }
+    ajouterMessage("J'ai bien reçu ta photo. Maintenant écris-moi en bas ce qui est écrit dessus, ou ce que tu veux que je fasse avec. Par exemple : 'Explique-moi cet exercice' ou 'Traduis ce texte' ou 'Aide-moi à répondre'.", "ai");
   };
   reader.readAsDataURL(file);
 }
-
 document.getElementById("question").addEventListener("keypress", function(e){
   if(e.key === "Enter"){ envoyer(); }
 });
